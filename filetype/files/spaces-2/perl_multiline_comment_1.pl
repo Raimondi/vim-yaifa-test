@@ -1,0 +1,40 @@
+=pod
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+=cut
+=foo
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+=cut
+b
+  b
+    b
+      b
+        b
+          b
+            b
+              b
+                b
+                  b
+                    b
+                      b

@@ -1,0 +1,63 @@
+#!/usr/bin/env fish -N
+# vim: ft=fish:
+# TODO: it would be better to port this to (ba)sh
+
+argparse -n getoptions 'h/help' 'n/name=' 'c/command=+' -- $argv
+
+set log_file (status dirname)/../log.txt
+set vim_cmd (command -v vim)
+if test -z "$vim_cmd"
+  echo "No vim executable was found!" >&2
+  exit 1
+end
+
+if begin test -z "$argv"
+  end
+  echo "No options provided!" >&2
+  exit 2
+end
+
+if begin test -z "$_flag_n"
+  end
+  echo "No buffer name provided!" >&2
+  exit 3
+end
+
+
+# the filenames might be already quoted
+set buffer_name (echo $_flag_n | string trim -c \')
+set output_file vim_ec_output_(echo $buffer_name | sed -e 's:/:_:g')
+set options (echo $argv | string trim -c \')
+set runtime (status filename | path dirname | path dirname | path dirname | string escape)
+set vim_args "-enN -u NORC -i NONE --not-a-term"
+set -a vim_args "--cmd 'set et sw=7 sts=7 ts=7'"
+set -a vim_args "--cmd 'set rtp+=$runtime'"
+set -a vim_args "--cmd 'set rtp-=$HOME/.vim'"
+set -a vim_args "--cmd 'set rtp-=$HOME/.vim/after'"
+if test -n "$_flag_c"
+  set -a vim_args $_flag_c
+end
+set -a vim_args "-c 'redir! >> $log_file'"
+set -a vim_args "-c 'echo strftime(\'%c\')'"
+set -a vim_args "-c 'call yaifa#test#GetOptions(\\'$output_file\\',"
+set -a vim_args "\\'$buffer_name\\',"
+set -a vim_args "\'$options\')'"
+set -a vim_args "-c 'qall!'"
+echo "$vim_cmd $vim_args" > $log_file
+echo >> $log_file
+if not eval "$vim_cmd $vim_args" >/dev/null
+  echo "Vim Could not create the output file: $output_file" >&2
+  exit 6
+end
+
+if not test -e "$output_file"
+  echo "Can not find output file: $output_file" >&2
+  exit 4
+end
+if not test -r "$output_file"
+  echo "Can not read output file: $output_file" >&2
+  exit 5
+end
+cat "$output_file"
+rm -f "$output_file"
+exit 0

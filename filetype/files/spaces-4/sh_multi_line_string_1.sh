@@ -1,0 +1,40 @@
+x = '
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+'
+x = "
+a\"
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+"
+b
+    b
+        b
+            b
+                b
+                    b
+                        b
+                            b
+                                b
+                                    b
+                                        b
+                                            b

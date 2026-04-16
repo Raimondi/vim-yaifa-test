@@ -1,0 +1,39 @@
+x = %q'
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a'
+x = %q'
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+'
+b
+    b
+        b
+            b
+                b
+                    b
+                        b
+                            b
+                                b
+                                    b
+                                        b
+                                            b

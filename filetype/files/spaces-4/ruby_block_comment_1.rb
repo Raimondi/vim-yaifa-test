@@ -1,0 +1,26 @@
+=begin
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+=end
+b
+    b
+        b
+            b
+                b
+                    b
+                        b
+                            b
+                                b
+                                    b
+                                        b
+                                            b

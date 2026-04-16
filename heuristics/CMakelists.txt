@@ -1,0 +1,88 @@
+cmake_minimum_required (VERSION 3.16.3)
+
+project(yaifa-heuristics-tests NONE)
+set(GETOPTIONS_CMD "${CMAKE_SOURCE_DIR}/bin/getoptions" CACHE STRING "getoptions command.")
+message(STATUS "Using getoptions ${GETOPTIONS_CMD}")
+set(EDITORCONFIG_CMD "${CMAKE_SOURCE_DIR}/bin/editorconfig" CACHE STRING "editorconfig command.")
+message(STATUS "Using editorconfig ${EDITORCONFIG_CMD}")
+set(TEST_FILES_DIR ${CMAKE_CURRENT_LIST_DIR}/files)
+enable_testing()
+
+function(add_getoptions_test name buffer_path vim_cmd options regex pass_fail)
+    set(buffer ${buffer_path})
+    string(REGEX REPLACE "^.*/${TEST_FILES_DIR}/[^/]+/" "" buffer ${buffer})
+    set(TEST_NAME ${name}/${buffer})
+    string(REGEX REPLACE " " "_" TEST_NAME ${TEST_NAME})
+    if(${vim_cmd} MATCHES "^ *$")
+        add_test(
+            NAME ${TEST_NAME}
+            COMMAND ${GETOPTIONS_CMD}
+            -n "${buffer_path}"
+            -c "--cmd 'let yaifa_use_editorconfig=0'"
+            "${options}"
+        )
+    else()
+        add_test(
+            NAME ${TEST_NAME}
+            COMMAND ${GETOPTIONS_CMD}
+            -n "${buffer_path}"
+            -c "--cmd 'let yaifa_use_editorconfig=0' ${vim_cmd}"
+            "${options}"
+        )
+    endif()
+    if(${pass_fail} MATCHES "^[Pp][Aa][Ss][Ss]$")
+        set_tests_properties(${TEST_NAME} PROPERTIES PASS_REGULAR_EXPRESSION "${regex}")
+    else()
+        set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "${regex}")
+    endif()
+endfunction()
+
+function(add_getoptions_tests set_name vim_cmd options regex pass_fail)
+    file(GLOB files LIST_DIRECTORIES false ${TEST_FILES_DIR}/${set_name}/*.*)
+    message(STATUS "* Adding tests under '${TEST_FILES_DIR}/${set_name}'")
+    foreach(file ${files})
+        if(${file} MATCHES "(^|/)\\.[^/]*$")
+            message(STATUS "Skipping '${file}'")
+            continue()
+        else()
+            message(STATUS "Adding '${file}'")
+        endif()
+        add_getoptions_test(
+            ${set_name}
+            ${file}
+            "${vim_cmd}"
+            ${options}
+            ${regex}
+            ${pass_fail}
+        )
+    endforeach()
+endfunction()
+
+# mixed-4
+add_getoptions_tests( mixed-4
+    ""
+    "expandtab tabstop softtabstop shiftwidth"
+    "^expandtab=false, tabstop=8, softtabstop=-1, shiftwidth=4[ \t\n\r]*$"
+    pass
+)
+# spaces-2
+add_getoptions_tests( spaces-2
+    ""
+    "expandtab tabstop softtabstop shiftwidth"
+    "^expandtab=true, tabstop=8, softtabstop=-1, shiftwidth=2[ \t\n\r]*$"
+    pass
+)
+# spaces-4
+add_getoptions_tests( spaces-4
+    ""
+    "expandtab tabstop softtabstop shiftwidth"
+    "^expandtab=true, tabstop=8, softtabstop=-1, shiftwidth=4[ \t\n\r]*$"
+    pass
+)
+# tabs-8
+add_getoptions_tests( tabs-8
+    ""
+    "expandtab tabstop softtabstop shiftwidth"
+    "^expandtab=false, tabstop=4, softtabstop=0, shiftwidth=0[ \t\n\r]*$"
+    pass
+)

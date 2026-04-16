@@ -1,0 +1,82 @@
+# New escape-sequence processing.
+cmake_minimum_required(VERSION 3.16.3)
+cmake_policy(VERSION 3.16.3)
+
+project(editorconfig-plugin-tests NONE)
+
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+    set(GETOPTIONS_CMD ${CMAKE_CURRENT_LIST_DIR}/../../bin/getoptions CACHE STRING "getoptions command.")
+    enable_testing()
+    message(STATUS "tests: Standalone testing enabled")
+endif()
+
+function(add_getoptions_test name buffer_path options regex)
+    set(TEST_NAME ec_plugin_${name})
+    add_test(NAME ${TEST_NAME} COMMAND ${GETOPTIONS_CMD}
+        -n "${CMAKE_CURRENT_SOURCE_DIR}/files/test_files/${buffer_path}"
+        -c "let yaifa_use_heuristics=0"
+        "${options}")
+    set_tests_properties(${TEST_NAME} PROPERTIES PASS_REGULAR_EXPRESSION "${regex}")
+endfunction()
+
+# Charset
+
+# test charset_latin1
+add_getoptions_test(charset_latin1 latin1.txt "fileencoding bomb" "^fileencoding=latin1, bomb=false[ \t\n\r]*$")
+
+# test charset_utf-8
+add_getoptions_test(charset_utf-8 utf-8.txt "fileencoding bomb" "^fileencoding=utf-8, bomb=false[ \t\n\r]*$")
+
+# test charset_utf-8-bom
+add_getoptions_test(charset_utf-8-bom utf-8-bom.txt "fileencoding bomb" "^fileencoding=utf-8, bomb=true[ \t\n\r]*$")
+
+# test charset_utf-16-le
+add_getoptions_test(charset_utf-16le utf-16le.txt "fileencoding bomb" "^fileencoding=utf-16le, bomb=true[ \t\n\r]*$")
+
+# test charset_utf-16-be
+add_getoptions_test(charset_utf-16be utf-16be.txt "fileencoding bomb" "^fileencoding=utf-16, bomb=true[ \t\n\r]*$")
+
+# Newline Style
+
+# test newline_lf
+add_getoptions_test(newline_lf lf.txt "fileformat" "^fileformat=unix[ \t\n\r]*$")
+
+# test newline_crlf
+add_getoptions_test(newline_crlf crlf.txt "fileformat" "^fileformat=dos[ \t\n\r]*$")
+
+# test newline_cr
+add_getoptions_test(newline_cr cr.txt "fileformat" "^fileformat=mac[ \t\n\r]*$")
+
+# Indentation
+
+# test indentation_3_space
+add_getoptions_test(indentation_3_space 3_space.txt "tabstop expandtab shiftwidth softtabstop"
+    "^tabstop=3, expandtab=true, shiftwidth=3, softtabstop=-1[ \t\n\r]*$")
+
+# test indentation_4_space
+add_getoptions_test(indentation_4_space 4_space.py "tabstop expandtab shiftwidth softtabstop"
+    "^tabstop=8, expandtab=true, shiftwidth=4, softtabstop=-1[ \t\n\r]*$")
+
+# test indentation_space
+add_getoptions_test(indentation_space space.py "tabstop expandtab shiftwidth softtabstop"
+    "^tabstop=7, expandtab=true, shiftwidth=7, softtabstop=7[ \t\n\r]*$")
+
+# test indentation_tab
+add_getoptions_test(indentation_tab tab.txt "tabstop expandtab shiftwidth softtabstop"
+    "^tabstop=7, expandtab=false, shiftwidth=7, softtabstop=7[ \t\n\r]*$")
+
+# test indentation_4_tab
+add_getoptions_test(indentation_4_tab 4_tab.txt "tabstop expandtab shiftwidth softtabstop"
+    "^tabstop=4, expandtab=false, shiftwidth=4, softtabstop=-1[ \t\n\r]*$")
+
+# test indentation_4_tab_width_of_8
+add_getoptions_test(indentation_4_tab_width_of_8 4_tab_width_of_8.txt "tabstop expandtab shiftwidth softtabstop"
+    "^tabstop=8, expandtab=false, shiftwidth=4, softtabstop=-1[ \t\n\r]*$")
+
+# Final Newline
+
+# test final_newline_with_newline
+add_getoptions_test(final_newline_with_newline with_newline.txt "fixendofline" "fixendofline=true")
+
+# test final_newline_without_newline
+add_getoptions_test(final_newline_without_newline without_newline.txt "fixendofline" "fixendofline=false")

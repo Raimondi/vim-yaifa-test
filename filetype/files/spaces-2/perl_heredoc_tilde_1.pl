@@ -1,0 +1,40 @@
+x <<~ foo; # foo bar
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+	foo
+x <<~'bar';
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+	bar
+b
+  b
+    b
+      b
+        b
+          b
+            b
+              b
+                b
+                  b
+                    b
+                      b

@@ -1,0 +1,66 @@
+#!/usr/bin/env fish -N
+# vim: ft=fish:
+# TODO: it would be better to port this to (ba)sh
+
+argparse -n editorconfig 'f=' 'h/help' 'b=' 'v/version' -- $argv
+
+set log_file (status dirname)/../log.txt
+set ec_version v:false
+if test -n "$_flag_version"
+  set ec_version v:true
+end
+
+set vim_cmd (command -v vim)
+if test -z "$vim_cmd"
+  echo "No vim executable was found!" >&2
+  exit 1
+end
+
+if begin not set -q _flag_f
+    and not set -q _flag_v
+  end
+  echo "No editorconfig file provided!" >&2
+  exit 2
+end
+
+# the filenames might be already quoted
+set conf_name (echo $_flag_f | string trim -c \')
+
+if begin test -z "$argv"
+    and not set -q _flag_v
+  end
+  echo "No source file provided!" >&2
+  exit 3
+end
+
+set src_file (echo $argv | string trim -c \')
+set output_file vim_ec_output_(echo $src_file | sed -e 's:/:_:g')
+set runtime (status filename | path dirname | path dirname | path dirname | string escape)
+set vim_args "-enN -u NONE -i NONE --not-a-term -c 'set rtp=$runtime'"
+set -a vim_args "--cmd 'set rtp-=$HOME/.vim'"
+set -a vim_args "--cmd 'set rtp-=$HOME/.vim/after'"
+set -a vim_args "-c 'redir! >> $log_file'"
+set -a vim_args "-c 'call yaifa#test#EC2File(\\'$output_file\\',"
+set -a vim_args "\\'$conf_name\\',"
+set -a vim_args "\\'$src_file\\',"
+set -a vim_args "\\'$_flag_b\\',"
+set -a vim_args "$ec_version)'"
+set -a vim_args "-c 'qall!'"
+echo "$vim_cmd $vim_args" > $log_file
+echo >> $log_file
+if not eval "$vim_cmd $vim_args" >/dev/null
+  echo "Vim Could not create the output file: $output_file" >&2
+  exit 6
+end
+
+if not test -e "$output_file"
+  echo "Can not find output file: $output_file" >&2
+  exit 4
+end
+if not test -r "$output_file"
+  echo "Can not read output file: $output_file" >&2
+  exit 5
+end
+cat "$output_file"
+rm -f "$output_file"
+exit 0

@@ -1,0 +1,12 @@
+cmake_minimum_required (VERSION 3.16.3)
+
+project(yaifa-tests NONE)
+set(GETOPTIONS_CMD "${CMAKE_SOURCE_DIR}/bin/getoptions" CACHE STRING "getoptions command.")
+message(STATUS "Using getoptions ${GETOPTIONS_CMD}")
+set(EDITORCONFIG_CMD "${CMAKE_SOURCE_DIR}/bin/editorconfig" CACHE STRING "editorconfig command.")
+message(STATUS "Using editorconfig ${EDITORCONFIG_CMD}")
+enable_testing()
+add_subdirectory(heuristics)
+add_subdirectory(filetype)
+add_subdirectory(modeline)
+add_subdirectory(editorconfig)

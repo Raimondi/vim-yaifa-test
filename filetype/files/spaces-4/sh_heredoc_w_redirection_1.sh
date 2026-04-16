@@ -1,0 +1,40 @@
+x <<- 'foo bar' > /dir/file
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+	foo bar
+x <<baz > /dir/file
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+baz
+b
+    b
+        b
+            b
+                b
+                    b
+                        b
+                            b
+                                b
+                                    b
+                                        b
+                                            b

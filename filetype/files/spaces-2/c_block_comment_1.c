@@ -1,0 +1,41 @@
+/*
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+*/
+       /*
+a
+   a
+      a
+         a
+            a
+               a
+                  a
+                     a
+                        a
+                           a
+                              a
+                                 a
+      abcd efg      */
+/* foo bar */
+b
+  b
+    b
+      b
+        b
+          b
+            b
+              b
+                b
+                  b
+                    b
+                      b
