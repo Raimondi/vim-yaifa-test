@@ -79,10 +79,10 @@ add_getoptions_tests( spaces-4
     "^expandtab=true, tabstop=8, softtabstop=-1, shiftwidth=4[ \t\n\r]*$"
     pass
 )
-# tabs-8
-add_getoptions_tests( tabs-8
+# tabs-3
+add_getoptions_tests( tabs-3
     ""
     "expandtab tabstop softtabstop shiftwidth"
-    "^expandtab=false, tabstop=4, softtabstop=0, shiftwidth=0[ \t\n\r]*$"
+    "^expandtab=false, tabstop=3, softtabstop=-1, shiftwidth=3[ \t\n\r]*$"
     pass
 )

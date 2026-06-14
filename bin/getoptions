@@ -30,7 +30,7 @@ set output_file vim_ec_output_(echo $buffer_name | sed -e 's:/:_:g')
 set options (echo $argv | string trim -c \')
 set runtime (status filename | path dirname | path dirname | path dirname | string escape)
 set vim_args "-enN -u NORC -i NONE --not-a-term"
-set -a vim_args "--cmd 'set et sw=7 sts=7 ts=7'"
+set -a vim_args "--cmd 'set et sw=3 sts=5 ts=7'"
 set -a vim_args "--cmd 'set rtp+=$runtime'"
 set -a vim_args "--cmd 'set rtp-=$HOME/.vim'"
 set -a vim_args "--cmd 'set rtp-=$HOME/.vim/after'"

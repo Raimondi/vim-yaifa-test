@@ -59,11 +59,11 @@ add_getoptions_test(indentation_4_space 4_space.py "tabstop expandtab shiftwidth
 
 # test indentation_space
 add_getoptions_test(indentation_space space.py "tabstop expandtab shiftwidth softtabstop"
-    "^tabstop=7, expandtab=true, shiftwidth=7, softtabstop=7[ \t\n\r]*$")
+    "^tabstop=7, expandtab=true, shiftwidth=3, softtabstop=5[ \t\n\r]*$")
 
 # test indentation_tab
 add_getoptions_test(indentation_tab tab.txt "tabstop expandtab shiftwidth softtabstop"
-    "^tabstop=7, expandtab=false, shiftwidth=7, softtabstop=7[ \t\n\r]*$")
+    "^tabstop=3, expandtab=false, shiftwidth=3, softtabstop=-1[ \t\n\r]*$")
 
 # test indentation_4_tab
 add_getoptions_test(indentation_4_tab 4_tab.txt "tabstop expandtab shiftwidth softtabstop"
